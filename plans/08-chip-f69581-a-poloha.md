@@ -206,17 +206,36 @@ chip skrýt:
 ```
 
 Na tabletu theme podmenu vypínal (`display: none`), takže bez chipu by nešlo
-otevřít. Obnovit hover dropdown:
+otevřít. Obnovit hover dropdown a explicitně vrátit i pozici:
 
 ```css
 @media (min-width: 768px) and (max-width: 1024px) {
 	#site-navigation.main-navigation .sub-menu,
 	#site-navigation.main-navigation ul li:hover > ul.sub-menu,
-	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu {
+	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu,
+	#site-navigation.main-navigation ul li.focus > ul.sub-menu {
 		display: block;
+		visibility: visible;
+	}
+
+	#site-navigation.main-navigation ul li:hover > ul,
+	#site-navigation.main-navigation ul li.focus > ul {
+		left: auto;
+	}
+
+	#site-navigation.main-navigation ul ul li:hover > ul,
+	#site-navigation.main-navigation ul ul li.focus > ul {
+		left: 100%;
 	}
 }
 ```
+
+Důležité: původní blok `@media (hover: none)` potlačoval hover dropdown plošně
+na všech šířkách. V emulaci tabletu (DevTools, RDM s dotykem) je `hover: none`
+aktivní i při ovládání myší, takže podmenu zůstalo odsunuté na
+`left: -99999px` a hover nefungoval. Proto je toto potlačení nově omezené na
+`@media (max-width: 767px) and (hover: none)`; na mobilu tam chipy řeší
+otevírání, na tabletu se použije běžný hover.
 
 Podmenu zůstává mimo obraz pomocí `left: -99999px` z tématu a zobrazí se při
 hoveru nebo focusu.
