@@ -149,3 +149,10 @@ Podrobný scénář je v [05-manualni-testovani.md](05-manualni-testovani.md).
 - Pokud child theme přebíjí `header.php` nebo `navigation.js`, musí se změny aplikovat
   v child theme.
 - Pokud hosting drží starý `?ver=`, je potřeba vyčistit cache, ne měnit kód.
+
+## 9. FontAwesome varování glyf bbox
+
+Konzole Firefoxu může u FontAwesome 4.7.0 hlásit
+`glyf: Glyph bbox was incorrect; adjusting (glyph 33)`. Není to regrese těchto
+úprav ani chyba šablony; jde o vlastnost binárky FA 4.7.0. Rozhodnutí je
+varování neopravovat, viz [11-fontawesome-woff2-glyf-bbox.md](11-fontawesome-woff2-glyf-bbox.md).

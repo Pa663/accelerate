@@ -16,6 +16,9 @@ problémů na mobilu a tabletu.
   a šipka od 768 px s flipem podmenu podle
   [10-sipka-od-768-a-flip-podmenu.md](10-sipka-od-768-a-flip-podmenu.md),
   mění se `style.css` a `js/navigation.js`
+- Dokumentace bez zásahu do kódu: varování FontAwesome `glyf` bbox ve WOFF2
+  vysvětluje [11-fontawesome-woff2-glyf-bbox.md](11-fontawesome-woff2-glyf-bbox.md);
+  jde o neškodné varování Firefoxu, varianta A – ignorovat.
 - Mimo rozsah: přepis šablony, změna HTML struktury celého webu, výměna jQuery, redesign hlavičky
 - Balíček pro server a seznam změn: [06-implementovane-zmeny.md](06-implementovane-zmeny.md)
 
@@ -33,6 +36,7 @@ problémů na mobilu a tabletu.
 | [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) | Barva chipu `#F69581`, bílé/plné pozadí podle stavu a ukotvení chipu k položce na mobilu |
 | [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md) | Nechipové chování nad 767 px, značky vnořených podpoložek `#F69581` a jemné rámování podmenu |
 | [10-sipka-od-768-a-flip-podmenu.md](10-sipka-od-768-a-flip-podmenu.md) | Šipka vnořených položek už od 768 px a překlopení podmenu u pravého okraje |
+| [11-fontawesome-woff2-glyf-bbox.md](11-fontawesome-woff2-glyf-bbox.md) | Vysvětlení varování `glyf: Glyph bbox was incorrect` u FontAwesome 4.7.0 a rozhodnutí jej neopravovat |
 
 ## Shrnutí problému
 
