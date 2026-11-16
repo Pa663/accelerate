@@ -3010,10 +3010,14 @@ button#wp-custom-header-video-button {
 	appearance: none;
 }
 
-#site-navigation .menu-toggle:focus-visible,
-#site-navigation .sub-toggle:focus-visible {
+#site-navigation .menu-toggle:focus-visible {
 	outline: 2px solid #77CC6D;
 	outline-offset: -2px;
+}
+
+#site-navigation .sub-toggle:focus-visible {
+	outline: 2px solid #7A2E1E;
+	outline-offset: 2px;
 }
 
 @media (hover: none) {
@@ -3045,11 +3049,11 @@ button#wp-custom-header-video-button {
 		min-height: 44px;
 		margin: 0;
 		padding: 0;
-		background: #EAF7E6;
-		border: 1px solid #A9D8A1;
+		background: #FFFFFF;
+		border: 2px solid #F69581;
 		border-radius: 8px;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-		color: #176B10;
+		color: #F69581;
 		font-family: inherit;
 		font-size: 18px;
 		font-weight: 400;
@@ -3089,26 +3093,8 @@ button#wp-custom-header-video-button {
 
 	#site-navigation .sub-toggle.active,
 	#site-navigation .sub-toggle[aria-expanded="true"] {
-		background: #2D911F;
-		border-color: #2D911F;
-		color: #FFFFFF;
-	}
-
-	#site-navigation > ul > li.current-menu-ancestor > .sub-toggle,
-	#site-navigation > ul > li.current-menu-item > .sub-toggle,
-	#site-navigation > ul > li.current_page_ancestor > .sub-toggle,
-	#site-navigation > ul > li.current_page_item > .sub-toggle {
-		background: #FFFFFF;
-		border-color: #FFFFFF;
-		color: #176B10;
-	}
-
-	#site-navigation > ul > li.current-menu-ancestor > .sub-toggle.active,
-	#site-navigation > ul > li.current-menu-item > .sub-toggle.active,
-	#site-navigation > ul > li.current_page_ancestor > .sub-toggle.active,
-	#site-navigation > ul > li.current_page_item > .sub-toggle.active {
-		background: #123E0E;
-		border-color: #123E0E;
+		background: #F69581;
+		border-color: #F69581;
 		color: #FFFFFF;
 	}
 
@@ -3157,44 +3143,40 @@ button#wp-custom-header-video-button {
 		float: none;
 	}
 
-	#site-navigation li.current-menu-item > .sub-toggle,
-	#site-navigation li.current_page_item > .sub-toggle,
-	#site-navigation .sub-menu li.current-menu-item > .sub-toggle,
-	#site-navigation .sub-menu li.current_page_item > .sub-toggle,
-	#site-navigation ul.children li.current-menu-item > .sub-toggle,
-	#site-navigation ul.children li.current_page_item > .sub-toggle {
-		background: #FFFFFF;
-		border-color: #FFFFFF;
-		color: #176B10;
-	}
-
-	#site-navigation li.current-menu-item > .sub-toggle.active,
-	#site-navigation li.current_page_item > .sub-toggle.active,
-	#site-navigation .sub-menu li.current-menu-item > .sub-toggle.active,
-	#site-navigation .sub-menu li.current_page_item > .sub-toggle.active,
-	#site-navigation ul.children li.current-menu-item > .sub-toggle.active,
-	#site-navigation ul.children li.current_page_item > .sub-toggle.active {
-		background: #123E0E;
-		border-color: #123E0E;
-		color: #FFFFFF;
-	}
 }
 
 @media (hover: hover) {
 	#site-navigation .sub-toggle:hover,
 	#site-navigation li.menu-item-has-children:hover > .sub-toggle,
 	#site-navigation li.page_item_has_children:hover > .sub-toggle {
-		background: #FFFFFF;
-		border-color: #FFFFFF;
-		color: #176B10;
+		background: #FDEDE9;
+		border-color: #F69581;
+		color: #F69581;
 	}
 
 	#site-navigation .sub-toggle:hover.active,
 	#site-navigation li.menu-item-has-children:hover > .sub-toggle.active,
 	#site-navigation li.page_item_has_children:hover > .sub-toggle.active {
-		background: #123E0E;
-		border-color: #123E0E;
+		background: #E5765C;
+		border-color: #E5765C;
 		color: #FFFFFF;
+	}
+}
+
+/* Keep the chip anchored to its own menu row, not to the expanded submenu. */
+@media (max-width: 767px) {
+	#site-navigation .sub-toggle,
+	#site-navigation .sub-menu .sub-toggle,
+	#site-navigation .sub-menu .sub-toggle.active {
+		top: 0;
+		bottom: auto;
+		width: 40px;
+		min-width: 40px;
+		height: 40px;
+		min-height: 40px;
+		font-size: 16px;
+		transform: none;
+		-webkit-transform: none;
 	}
 }
 

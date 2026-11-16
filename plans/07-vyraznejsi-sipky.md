@@ -4,6 +4,10 @@ Stav: **implementováno, čeká ruční testování**
 Datum: 2026-11-16
 Navazuje na [06-implementovane-zmeny.md](06-implementovane-zmeny.md).
 
+Poznámka: zelené barevné schéma chipu a svislé ukotvení popsané v tomto
+dokumentu nahrazuje novější [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md).
+Platné je bílé/plné pozadí `#F69581` a ukotvení `top: 0` na mobilu.
+
 ## 1. Problém
 
 Současné tlačítko šipky podmenu je funkčně správné, ale vizuálně slabé:

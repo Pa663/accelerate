@@ -4,6 +4,8 @@ Stav: **implementováno v pracovním stromu, čeká ruční testování na serve
 Datum: 2026-11-16.
 Poslední doplnění: výraznější chipy šipek a odlišení plovoucího tlačítka
 `#scroll-up`, viz [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md).
+Barvy chipu `#F69581` a ukotvení k menu položce na mobilu řeší
+[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md); mění se pouze `style.css`.
 
 ## 1. Soubory k nahrání
 
@@ -20,9 +22,10 @@ Nahrajte těchto pět souborů z kořene šablony:
 Poznámka: `rtl.css` není v této šabloně nikde enqueued. Úprava je připravená pro případ,
 že jej načítá child theme nebo plugin. Pokud RTL nepoužíváte, stačí nahrát první čtyři soubory.
 
-Poslední úprava z [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) mění pouze
-`style.css`, `rtl.css` a `js/navigation.js`. `header.php` a `inc/functions.php`
-zůstávají z předchozího balíčku.
+Poslední úprava z [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) mění
+`style.css`, `rtl.css` a `js/navigation.js`. Úprava z
+[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) mění už jen `style.css`.
+`header.php` a `inc/functions.php` zůstávají z předchozího balíčku.
 
 ## 2. Co se změnilo
 
