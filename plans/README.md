@@ -9,8 +9,9 @@ problémů na mobilu a tabletu.
 - Fáze: **implementováno, čeká ruční testování na serveru**
 - Datum: 2026-11-16
 - Rozsah: `header.php`, `js/navigation.js`, `style.css`, `rtl.css`, `inc/functions.php`
-- Poslední úprava: barvy a ukotvení chipu podle
-  [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md), mění se pouze `style.css`
+- Poslední úprava: barvy, ukotvení a omezení chipu na mobil do 767 px podle
+  [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md), mění se `style.css`
+  a `js/navigation.js`
 - Mimo rozsah: přepis šablony, změna HTML struktury celého webu, výměna jQuery, redesign hlavičky
 - Balíček pro server a seznam změn: [06-implementovane-zmeny.md](06-implementovane-zmeny.md)
 

@@ -6,9 +6,19 @@ Navazuje na [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md).
 
 ## 0. Výsledek implementace
 
-Změněn byl pouze [`style.css`](../style.css:3013). `rtl.css` zůstává bez úpravy,
-protože svislé ukotvení z `style.css` platí i v RTL. `js/navigation.js`, PHP
-soubory ani databáze se nemění.
+Chipy se zobrazují pouze v mobilním menu do šířky 767 px včetně. Nad 767 px je
+skryje `#site-navigation .sub-toggle { display: none; }` a na tabletu 768–1024 px
+se obnoví původní hover dropdown, který theme v tomto rozsahu vypínal.
+
+Změněné soubory:
+
+- [`style.css`](../style.css:3013) – barvy chipu, ukotvení k položce a omezení
+  chipů na `max-width: 767px`,
+- [`js/navigation.js`](../js/navigation.js:80) – `matchMedia` a resetní práh
+  změněny z 1024 na 767 px, aby se auto-expand aktivní větve a reset tříd
+  nespouštěl na tabletu,
+- `rtl.css` – beze změny,
+- PHP soubory a databáze – beze změny.
 
 Ověřeno ve zdrojovém souboru:
 
@@ -18,7 +28,9 @@ Ověřeno ve zdrojovém souboru:
 - výchozí chip má `background: #FFFFFF; border: 2px solid #F69581; color: #F69581`,
 - rozbalovací chip má `background: #F69581; border-color: #F69581; color: #FFFFFF`,
 - na mobilu platí `top: 0` a `transform: none` pro `.sub-toggle` a jeho
-  vnořené varianty.
+  vnořené varianty,
+- od 768 px je chip skrytý a na tabletu platí `display: block` pro
+  `#site-navigation.main-navigation .sub-menu`.
 
 ## 1. Požadavky
 
@@ -27,6 +39,8 @@ Ověřeno ve zdrojovém souboru:
 3. Zbalovací i rozbalovací chip zůstává ukotvený přímo u menu položky, kterou
    ovládá. Nesmí se posouvat do středu rozbaleného podmenu ani se schovávat
    pod chipy vnořených položek.
+4. Chipy se používají pouze v mobilním menu do šířky 767 px včetně. Na tabletu
+   768–1024 px se používá původní hover dropdown.
 
 ## 2. Příčina posunu chipu
 
@@ -169,16 +183,49 @@ RTL blok řeší pouze vodorovné zrcadlení (`left`/`right`). Nové svislé
 ukotvení z `style.css` platí i v RTL, protože `rtl.css` `top` ani `transform`
 nepřebíjí. Změna v `rtl.css` tedy není nutná.
 
-### 4.7 `js/navigation.js`
+### 4.7 `js/navigation.js` – mobilní breakpoint
 
-Bez změny. Ikona `fa-chevron-down` i logika `aria-expanded` zůstávají.
-Nepřidává se žádné měření výšky v JavaScriptu, řešení je čistě v CSS.
+`matchMedia` dotaz v [`js/navigation.js`](../js/navigation.js:80) změnit
+z `(max-width: 1024px), (hover: none)` na `(max-width: 767px)` a stejně tak
+fallback `window.innerWidth <= 767`. V `reset()` změnit práh
+z `window.innerWidth > 1024` na `> 767` ([`js/navigation.js`](../js/navigation.js:280)).
+Díky tomu se auto-expand aktivní větve ani reset tříd nespouští na tabletu.
+
+### 4.8 `style.css` – chipy jen do 767 px a tablet hover
+
+Původní médium `@media (max-width: 1024px), (hover: none)`, které obaluje
+vzhled a otevírání chipu, změnit na `@media (max-width: 767px)`. Nad 767 px
+chip skrýt:
+
+```css
+@media (min-width: 768px) {
+	#site-navigation .sub-toggle {
+		display: none;
+	}
+}
+```
+
+Na tabletu theme podmenu vypínal (`display: none`), takže bez chipu by nešlo
+otevřít. Obnovit hover dropdown:
+
+```css
+@media (min-width: 768px) and (max-width: 1024px) {
+	#site-navigation.main-navigation .sub-menu,
+	#site-navigation.main-navigation ul li:hover > ul.sub-menu,
+	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu {
+		display: block;
+	}
+}
+```
+
+Podmenu zůstává mimo obraz pomocí `left: -99999px` z tématu a zobrazí se při
+hoveru nebo focusu.
 
 ## 5. Co se nemění
 
 - Žádná změna PHP, databáze, uloženého menu ani `aria` logiky.
-- Žádná změna breakpointů 767 px a 1024 px.
-- Žádná změna otevírání/zavírání podmenu ani auto-expandu aktuální větve.
+- Breakpointy 767 px a 1024 px zůstávají, ale chip je nově vázaný jen na 767 px.
+- Chování otevírání na mobilu zůstává; na tabletu se vrací původní hover dropdown.
 - Plovoucí tlačítko `#scroll-up` zůstává zelené a kruhové, čímž se od růžových
   chipů dál vizuálně odlišuje.
 - Šířka odsazení odkazu `padding-right: 64px` zůstává, protože 40px chip se do
@@ -195,16 +242,16 @@ Nepřidává se žádné měření výšky v JavaScriptu, řešení je čistě v
 6. Mobil: automaticky rozbalená aktuální větev – chip je plný růžový a správně ukotvený.
 7. Mobil: dlouhý název položky se zalamuje – chip zůstává nahoře u řádku a text
    se s ním nepřekrývá.
-8. Tablet 768 px a 1024 px: chip zůstává svisle centrovaný v řádku, barvy sedí.
+8. Tablet 768 px a 1024 px: chipy nejsou vidět a podmenu se otevírá hoverem myši.
 9. Desktop: chipy nejsou vidět, menu funguje beze změny.
-10. Zařízení s hoverem v dotykovém režimu: hover je světle růžový, rozbalovací
+10. Mobilní šířka na zařízení s hoverem: hover je světle růžový, rozbalovací
     hover tmavší růžový, žádný zelený stav.
 11. Klávesnice: focus je viditelný tmavě červenohnědý, Enter a Space fungují.
 12. RTL: chip je vlevo, svislé ukotvení funguje stejně.
 
 ## 7. Rollback
 
-Vrátit `style.css` z předchozí verze. `rtl.css`, `js/navigation.js`, PHP soubory
+Vrátit `style.css` a `js/navigation.js` z předchozí verze. `rtl.css`, PHP soubory
 ani databáze se touto úpravou nemění.
 
 ## 8. Ověření před nahráním
@@ -212,4 +259,6 @@ ani databáze se touto úpravou nemění.
 - Zkontrolovat, že v `style.css` už není zelená `#2D911F`, `#176B10`, `#123E0E`,
   `#EAF7E6` ani `#A9D8A1` v pravidlech pro `.sub-toggle`.
 - Zkontrolovat, že na mobilu platí `top: 0` a `transform: none` pro `.sub-toggle`.
-- `js/navigation.js` neprošel změnou, `node --check` není nutný.
+- Zkontrolovat, že nad 767 px platí `#site-navigation .sub-toggle { display: none; }`.
+- `node --check js/navigation.js` – bez chyb.
+- V `js/navigation.js` už není breakpoint 1024 pro `mq` ani pro `reset`.

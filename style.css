@@ -3033,7 +3033,7 @@ button#wp-custom-header-video-button {
 	}
 }
 
-@media (max-width: 1024px), (hover: none) {
+@media (max-width: 767px) {
 	#site-navigation .sub-toggle,
 	#site-navigation .sub-menu .sub-toggle {
 		display: flex;
@@ -3177,6 +3177,22 @@ button#wp-custom-header-video-button {
 		font-size: 16px;
 		transform: none;
 		-webkit-transform: none;
+	}
+}
+
+/* Chips belong to the mobile menu only. Hide them from tablet width up. */
+@media (min-width: 768px) {
+	#site-navigation .sub-toggle {
+		display: none;
+	}
+}
+
+/* Tablets use the original hover dropdown again, without chips. */
+@media (min-width: 768px) and (max-width: 1024px) {
+	#site-navigation.main-navigation .sub-menu,
+	#site-navigation.main-navigation ul li:hover > ul.sub-menu,
+	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu {
+		display: block;
 	}
 }
 

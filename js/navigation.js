@@ -77,8 +77,8 @@ jQuery( function( $ ) {
 		collapse: 'Close submenu'
 	};
 
-	var mq = window.matchMedia ? window.matchMedia( '(max-width: 1024px), (hover: none)' ) : {
-		matches: window.innerWidth <= 1024,
+	var mq = window.matchMedia ? window.matchMedia( '(max-width: 767px)' ) : {
+		matches: window.innerWidth <= 767,
 		addListener: function() {},
 		removeListener: function() {}
 	};
@@ -277,7 +277,7 @@ jQuery( function( $ ) {
 		getNav().find( 'ul.sub-menu, ul.children' ).removeAttr( 'style' );
 
 		// Leaving the mobile width must not leave the menu in the collapsed state.
-		if ( window.innerWidth > 1024 ) {
+		if ( window.innerWidth > 767 ) {
 			getNav().removeClass( 'main-small-navigation' ).addClass( 'main-navigation' );
 			getNav().find( '.menu-toggle' ).attr( 'aria-expanded', 'false' );
 			$( 'body' ).removeClass( 'accelerate-menu-open' );

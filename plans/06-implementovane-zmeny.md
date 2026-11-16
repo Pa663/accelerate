@@ -4,8 +4,9 @@ Stav: **implementováno v pracovním stromu, čeká ruční testování na serve
 Datum: 2026-11-16.
 Poslední doplnění: výraznější chipy šipek a odlišení plovoucího tlačítka
 `#scroll-up`, viz [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md).
-Barvy chipu `#F69581` a ukotvení k menu položce na mobilu řeší
-[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md); mění se pouze `style.css`.
+Barvy chipu `#F69581`, ukotvení k menu položce a omezení chipů na mobil
+do 767 px řeší [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md);
+mění se `style.css` a `js/navigation.js`.
 
 ## 1. Soubory k nahrání
 
@@ -24,7 +25,8 @@ Poznámka: `rtl.css` není v této šabloně nikde enqueued. Úprava je připrav
 
 Poslední úprava z [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) mění
 `style.css`, `rtl.css` a `js/navigation.js`. Úprava z
-[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) mění už jen `style.css`.
+[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) mění `style.css` a
+`js/navigation.js` (chip jen do 767 px, na tabletu hover dropdown).
 `header.php` a `inc/functions.php` zůstávají z předchozího balíčku.
 
 ## 2. Co se změnilo
