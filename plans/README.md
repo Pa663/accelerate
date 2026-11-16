@@ -22,6 +22,7 @@ problémů na mobilu a tabletu.
 | [04-implementacni-postup.md](04-implementacni-postup.md) | Pořadí prací pro code mode, rozdělení změn, kontrola regresí |
 | [05-manualni-testovani.md](05-manualni-testovani.md) | Ruční nasazení na server, test ve Firefoxu a Edge s DevTools, iPhone a iPad, rollback |
 | [06-implementovane-zmeny.md](06-implementovane-zmeny.md) | Seznam změněných souborů k nahrání, popis implementace, ověření a rollback |
+| [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) | Návrh výraznějšího chipu pro šipky podmenu, tap target 44 px, RTL a testování |
 
 ## Shrnutí problému
 

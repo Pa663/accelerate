@@ -192,7 +192,7 @@ jQuery( function( $ ) {
 			} );
 
 			$button.append( $( '<i>', {
-				'class': 'fa fa-caret-down',
+				'class': 'fa fa-chevron-down',
 				'aria-hidden': 'true'
 			} ) );
 
@@ -240,8 +240,10 @@ jQuery( function( $ ) {
 
 		if ( isSmall ) {
 			closeAll( false );
+			$( 'body' ).removeClass( 'accelerate-menu-open' );
 		} else {
 			autoExpandCurrentBranch();
+			$( 'body' ).addClass( 'accelerate-menu-open' );
 		}
 	} );
 
@@ -274,8 +276,17 @@ jQuery( function( $ ) {
 		getNav().find( '.sub-menu-open' ).removeClass( 'sub-menu-open' );
 		getNav().find( 'ul.sub-menu, ul.children' ).removeAttr( 'style' );
 
+		// Leaving the mobile width must not leave the menu in the collapsed state.
+		if ( window.innerWidth > 1024 ) {
+			getNav().removeClass( 'main-small-navigation' ).addClass( 'main-navigation' );
+			getNav().find( '.menu-toggle' ).attr( 'aria-expanded', 'false' );
+			$( 'body' ).removeClass( 'accelerate-menu-open' );
+		}
+
 		if ( mq.matches ) {
 			autoExpandCurrentBranch();
+		} else {
+			$( 'body' ).removeClass( 'accelerate-menu-open' );
 		}
 	}
 

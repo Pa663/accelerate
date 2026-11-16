@@ -49,6 +49,10 @@ nebo BrowserStack.
 | S25 | Otevřené podmenu, tap mimo a znovu otevření hamburgeru | žádný zastaralý stav z `sessionStorage`, rozbalení odpovídá aktuální stránce |
 | S26 | Tlačítko zpět v prohlížeči po navigaci z podmenu | menu je zavřené, po otevření hamburgeru správná větev rozbalená |
 | S27 | Uživatel ručně zavře auto-rozbalenou větev a přepne breakpoint | po návratu do mobilu se větev znovu rozbalí podle aktuální URL |
+| S28 | Mobil, otevřené menu, vizuální kontrola šipky | světlý zaoblený čtverec s tmavě zeleným chevronem, snadno trefitelný prstem |
+| S29 | Mobil, otevřené podmenu | chip je plně zelený, ikona otočená, stav odpovídá `aria-expanded` |
+| S30 | Mobil, otevřené dlouhé menu a scroll dolů | plovoucí tlačítko zpět nahoru je skryté a nepřekrývá položky |
+| S31 | Desktop a RTL | plovoucí tlačítko je kruh s dlouhou šipkou, chipy podmenu jsou čtverce, RTL zrcadlí pozici |
 
 ## 3. Regresní kontrola
 

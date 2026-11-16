@@ -458,13 +458,13 @@ a#scroll-up {
     #site-navigation .sub-toggle,
     #site-navigation .sub-menu .sub-toggle {
         right: auto;
-        left: 0;
+        left: 8px;
     }
 
     #site-navigation .menu-item-has-children > a,
     #site-navigation .page_item_has_children > a {
         padding-right: 0;
-        padding-left: 56px;
+        padding-left: 64px;
     }
 
     #site-navigation.main-navigation ul.sub-menu li.sub-menu-open > ul.sub-menu,
@@ -474,4 +474,9 @@ a#scroll-up {
         left: auto;
         right: 100%;
     }
+}
+
+a#scroll-up {
+    right: auto;
+    left: 20px;
 }

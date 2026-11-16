@@ -3036,22 +3036,22 @@ button#wp-custom-header-video-button {
 		align-items: center;
 		justify-content: center;
 		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		width: 48px;
+		top: 50%;
+		right: 8px;
+		bottom: auto;
+		width: 44px;
+		height: 44px;
 		min-width: 44px;
 		min-height: 44px;
-		height: auto;
 		margin: 0;
 		padding: 0;
-		background: transparent;
-		border: 0;
-		border-radius: 0;
-		box-shadow: none;
-		color: #222;
+		background: #EAF7E6;
+		border: 1px solid #A9D8A1;
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+		color: #176B10;
 		font-family: inherit;
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 400;
 		line-height: 1;
 		text-align: center;
@@ -3062,7 +3062,8 @@ button#wp-custom-header-video-button {
 		-webkit-tap-highlight-color: transparent;
 		-webkit-appearance: none;
 		appearance: none;
-		transform: none;
+		transform: translateY(-50%);
+		transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 	}
 
 	#site-navigation .sub-toggle .fa {
@@ -3071,25 +3072,44 @@ button#wp-custom-header-video-button {
 		transform: rotate(0deg);
 	}
 
-	#site-navigation .sub-toggle.active .fa {
+	#site-navigation .sub-toggle.active .fa,
+	#site-navigation .sub-toggle[aria-expanded="true"] .fa {
 		transform: rotate(180deg);
 	}
 
 	#site-navigation .sub-menu .sub-toggle,
 	#site-navigation .sub-menu .sub-toggle.active {
-		transform: none;
+		transform: translateY(-50%);
 	}
 
 	#site-navigation .menu-item-has-children > a,
 	#site-navigation .page_item_has_children > a {
-		padding-right: 56px;
+		padding-right: 64px;
+	}
+
+	#site-navigation .sub-toggle.active,
+	#site-navigation .sub-toggle[aria-expanded="true"] {
+		background: #2D911F;
+		border-color: #2D911F;
+		color: #FFFFFF;
 	}
 
 	#site-navigation > ul > li.current-menu-ancestor > .sub-toggle,
 	#site-navigation > ul > li.current-menu-item > .sub-toggle,
 	#site-navigation > ul > li.current_page_ancestor > .sub-toggle,
 	#site-navigation > ul > li.current_page_item > .sub-toggle {
-		color: #fff;
+		background: #FFFFFF;
+		border-color: #FFFFFF;
+		color: #176B10;
+	}
+
+	#site-navigation > ul > li.current-menu-ancestor > .sub-toggle.active,
+	#site-navigation > ul > li.current-menu-item > .sub-toggle.active,
+	#site-navigation > ul > li.current_page_ancestor > .sub-toggle.active,
+	#site-navigation > ul > li.current_page_item > .sub-toggle.active {
+		background: #123E0E;
+		border-color: #123E0E;
+		color: #FFFFFF;
 	}
 
 	#site-navigation ul li.focus > ul,
@@ -3143,12 +3163,71 @@ button#wp-custom-header-video-button {
 	#site-navigation .sub-menu li.current_page_item > .sub-toggle,
 	#site-navigation ul.children li.current-menu-item > .sub-toggle,
 	#site-navigation ul.children li.current_page_item > .sub-toggle {
-		color: #fff;
+		background: #FFFFFF;
+		border-color: #FFFFFF;
+		color: #176B10;
+	}
+
+	#site-navigation li.current-menu-item > .sub-toggle.active,
+	#site-navigation li.current_page_item > .sub-toggle.active,
+	#site-navigation .sub-menu li.current-menu-item > .sub-toggle.active,
+	#site-navigation .sub-menu li.current_page_item > .sub-toggle.active,
+	#site-navigation ul.children li.current-menu-item > .sub-toggle.active,
+	#site-navigation ul.children li.current_page_item > .sub-toggle.active {
+		background: #123E0E;
+		border-color: #123E0E;
+		color: #FFFFFF;
 	}
 }
 
 @media (hover: hover) {
-	#site-navigation li.menu-item-has-children:hover > .sub-toggle {
-		color: #fff;
+	#site-navigation .sub-toggle:hover,
+	#site-navigation li.menu-item-has-children:hover > .sub-toggle,
+	#site-navigation li.page_item_has_children:hover > .sub-toggle {
+		background: #FFFFFF;
+		border-color: #FFFFFF;
+		color: #176B10;
+	}
+
+	#site-navigation .sub-toggle:hover.active,
+	#site-navigation li.menu-item-has-children:hover > .sub-toggle.active,
+	#site-navigation li.page_item_has_children:hover > .sub-toggle.active {
+		background: #123E0E;
+		border-color: #123E0E;
+		color: #FFFFFF;
+	}
+}
+
+/* Floating back-to-top control, visually distinct from submenu chips. */
+a#scroll-up {
+	right: 20px;
+	bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+	width: 48px;
+	height: 48px;
+	padding: 0;
+	border-radius: 50%;
+	background-color: #2D911F;
+	opacity: 0.9;
+	filter: none;
+	text-align: center;
+	line-height: 48px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+	z-index: 999;
+}
+
+a#scroll-up i {
+	font-size: 18px;
+	line-height: 48px;
+}
+
+a#scroll-up:hover {
+	background-color: #1F7A16;
+	opacity: 1;
+}
+
+@media (max-width: 767px) {
+	body.accelerate-menu-open #scroll-up {
+		visibility: hidden;
+		pointer-events: none;
 	}
 }

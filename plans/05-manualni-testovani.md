@@ -18,6 +18,10 @@ Změny se týkají pouze těchto souborů aktivní šablony:
 
 Nic dalšího se nenahrává. Nemění se databáze, nastavení WordPressu ani pluginy.
 
+Poslední úprava výraznosti šipek a plovoucího tlačítka mění pouze `style.css`,
+`rtl.css` a `js/navigation.js`. Pokud už máte na serveru předchozí balíček,
+stačí nahrát tyto tři soubory.
+
 **Pozor na child theme:** pokud je aktivní child theme, musí se soubory nahrát do něj,
 nebo ověřit, že child theme tyto soubory sám nepřebíjí. Aktivní šablonu zjistíte ve
 vzhledu nebo příkazem `wp theme list` na serveru.
@@ -104,6 +108,19 @@ Teprve potom řešit kód.
 | C2 | Kliknout na položku | navigace |
 | C3 | Zkontrolovat, že šipka není vidět | `.sub-toggle` skrytý |
 | C4 | Projít menu klávesnicí Tab | pořadí a fokus viditelné |
+
+### 4.6 Sada D – výraznost šipek a plovoucí tlačítko
+
+| # | Krok | Očekávání |
+| --- | --- | --- |
+| D1 | Mobil 390 px, otevřít menu | šipka je světlý zaoblený čtverec s tmavě zeleným chevronem |
+| D2 | Kliknout na šipku | chip ztmavne do plné zelené, ikona se otočí |
+| D3 | Otevřít aktuální položku | chip je bílý s tmavě zelenou ikonou |
+| D4 | Otevřít dlouhé menu a odscrollovat dolů | plovoucí tlačítko zpět nahoru není vidět |
+| D5 | Zavřít menu | plovoucí tlačítko se vrátí, pokud je stránka odscrollovaná |
+| D6 | Porovnat tvary | šipka podmenu je čtverec, plovoucí tlačítko je kruh s dlouhou šipkou nahoru |
+| D7 | Tablet 768 a 1024 px | chip je uvnitř řádku, text se nepřekrývá |
+| D8 | RTL varianta | chip je vlevo, plovoucí tlačítko vlevo dole |
 
 ## 5. Test na iPhonu
 
