@@ -3229,6 +3229,7 @@ button#wp-custom-header-video-button {
 	#site-navigation ul.children li.menu-item-has-children > a::after,
 	#site-navigation ul.children li.page_item_has_children > a::after {
 		content: "\f105";
+		display: block;
 		font-family: FontAwesome;
 		font-size: 10px;
 		font-weight: 400;
@@ -3240,6 +3241,17 @@ button#wp-custom-header-video-button {
 		-webkit-transform: translateY(-50%);
 		transform: translateY(-50%);
 		pointer-events: none;
+	}
+}
+
+/* Nested submenus flip to the left when they would leave the viewport. */
+@media (min-width: 768px) {
+	#site-navigation .sub-menu li.sub-menu-flip > ul.sub-menu,
+	#site-navigation .sub-menu li.sub-menu-flip > ul.children,
+	#site-navigation ul.children li.sub-menu-flip > ul.sub-menu,
+	#site-navigation ul.children li.sub-menu-flip > ul.children {
+		left: auto;
+		right: 100%;
 	}
 }
 

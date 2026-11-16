@@ -7,7 +7,9 @@ Poslední doplnění: výraznější chipy šipek a odlišení plovoucího tlač
 Barvy chipu `#F69581`, ukotvení k menu položce a omezení chipů na mobil
 do 767 px řeší [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md).
 Nechipové chování nad 767 px, značky vnořených podpoložek a jemné rámování
-řeší [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md);
+řeší [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md).
+Šipku vnořených položek od 768 px a překlopení podmenu u pravého okraje řeší
+[10-sipka-od-768-a-flip-podmenu.md](10-sipka-od-768-a-flip-podmenu.md);
 mění se `style.css` a `js/navigation.js`.
 
 ## 1. Soubory k nahrání

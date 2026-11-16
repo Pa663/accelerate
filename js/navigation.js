@@ -190,6 +190,30 @@ jQuery( function( $ ) {
 	}
 
 	/**
+	 * Flips a nested submenu to the left when it would overflow the viewport.
+	 */
+	function updateSubmenuFlip( $li ) {
+		var nested = $li.parent().is( 'ul.sub-menu, ul.children' );
+
+		if ( ! nonChipMq.matches || ! nested ) {
+			$li.removeClass( 'sub-menu-flip' );
+			return;
+		}
+
+		var $sub = getSubmenu( $li );
+
+		if ( ! $sub.length ) {
+			return;
+		}
+
+		var rect = $li[ 0 ].getBoundingClientRect();
+		var width = $sub.outerWidth() || 200;
+		var viewport = document.documentElement.clientWidth;
+
+		$li.toggleClass( 'sub-menu-flip', rect.right + width > viewport );
+	}
+
+	/**
 	 * Expands the branch that belongs to the current page.
 	 *
 	 * WordPress adds current-menu-ancestor and related classes on the server,
@@ -276,6 +300,8 @@ jQuery( function( $ ) {
 			return;
 		}
 
+		updateSubmenuFlip( $( this ) );
+
 		var original = event.originalEvent || {};
 
 		if ( hoverMq.matches && 'pen' !== original.pointerType ) {
@@ -315,6 +341,24 @@ jQuery( function( $ ) {
 		}
 
 		closeTabletBranch( $( this ) );
+	} );
+
+	// Keyboard focus can flip a nested submenu too.
+	$( document ).on( 'focusin', '#site-navigation li.menu-item-has-children, #site-navigation li.page_item_has_children', function() {
+		if ( nonChipMq.matches ) {
+			updateSubmenuFlip( $( this ) );
+		}
+	} );
+
+	// A viewport change can move a submenu over the right edge.
+	$( window ).on( 'resize', function() {
+		if ( ! nonChipMq.matches ) {
+			return;
+		}
+
+		getNav().find( 'li.menu-item-has-children, li.page_item_has_children' ).each( function() {
+			updateSubmenuFlip( $( this ) );
+		} );
 	} );
 
 	// Non-chip touch: the first tap opens the branch instead of navigating.
@@ -404,6 +448,7 @@ jQuery( function( $ ) {
 
 		getNav().find( '.sub-toggle' ).attr( 'aria-expanded', 'false' ).removeClass( 'active' );
 		getNav().find( '.sub-menu-open' ).removeClass( 'sub-menu-open' );
+		getNav().find( '.sub-menu-flip' ).removeClass( 'sub-menu-flip' );
 		getNav().find( 'ul.sub-menu, ul.children' ).removeAttr( 'style' );
 
 		// Leaving the mobile width must not leave the menu in the collapsed state.
