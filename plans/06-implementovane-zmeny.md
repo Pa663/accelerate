@@ -156,3 +156,15 @@ Konzole Firefoxu může u FontAwesome 4.7.0 hlásit
 `glyf: Glyph bbox was incorrect; adjusting (glyph 33)`. Není to regrese těchto
 úprav ani chyba šablony; jde o vlastnost binárky FA 4.7.0. Rozhodnutí je
 varování neopravovat, viz [11-fontawesome-woff2-glyf-bbox.md](11-fontawesome-woff2-glyf-bbox.md).
+
+## 10. Non-passive touchstart u slideru
+
+Konzole Chromu a Edge může na titulní stránce s aktivním sliderem hlásit
+`[Violation] Added non-passive event listener to a scroll-blocking 'touchstart' event`.
+Zdroj je Cycle2 swipe plugin, který se načítá z
+[`inc/functions.php`](../inc/functions.php:69) a váže `touchstart` přes jQuery
+`.bind()` na [`js/jquery.cycle2.swipe.js`](../js/jquery.cycle2.swipe.js:19).
+Není to regrese těchto úprav ani chyba šablony; jde o výkonnostní hint, který
+vzniká proto, že plugin potřebuje `preventDefault()` při horizontálním swipu.
+Rozhodnutí je hlášku neopravovat, viz
+[12-non-passive-touchstart.md](12-non-passive-touchstart.md).
