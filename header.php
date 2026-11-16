@@ -107,14 +107,25 @@ if ( function_exists( 'wp_body_open' ) ) {
 
 			<?php if( accelerate_options( 'accelerate_header_image_position', 'position_two' ) == 'position_two' ) { accelerate_render_header_image(); } ?>
 
-			<nav id="site-navigation" class="main-navigation inner-wrap clearfix" role="navigation">
-				<h3 class="menu-toggle"><?php _e( 'Menu', 'accelerate' ); ?></h3>
+			<nav id="site-navigation" class="main-navigation inner-wrap clearfix">
+				<button type="button" class="menu-toggle" aria-expanded="false" aria-controls="primary-menu">
+					<?php esc_html_e( 'Menu', 'accelerate' ); ?>
+				</button>
 				<?php
 					if ( has_nav_menu( 'primary' ) ) {
-						wp_nav_menu( array( 'theme_location' => 'primary' ) );
+						wp_nav_menu( array(
+							'theme_location' => 'primary',
+							'container'      => false,
+							'menu_id'        => 'primary-menu',
+							'menu_class'     => 'nav-menu',
+						) );
 					}
 					else {
-						wp_page_menu();
+						wp_page_menu( array(
+							'container' => false,
+							'before'    => '<ul id="primary-menu" class="nav-menu">',
+							'after'     => '</ul>',
+						) );
 					}
 				?>
 			</nav>

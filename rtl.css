@@ -451,3 +451,27 @@ a#scroll-up {
         left: 0;
     }
 }
+
+/* =RESPONSIVE MENU FIX RTL
+----------------------------------------------- */
+@media (max-width: 1024px), (hover: none) {
+    #site-navigation .sub-toggle,
+    #site-navigation .sub-menu .sub-toggle {
+        right: auto;
+        left: 0;
+    }
+
+    #site-navigation .menu-item-has-children > a,
+    #site-navigation .page_item_has_children > a {
+        padding-right: 0;
+        padding-left: 56px;
+    }
+
+    #site-navigation.main-navigation ul.sub-menu li.sub-menu-open > ul.sub-menu,
+    #site-navigation.main-navigation ul.children li.sub-menu-open > ul.children,
+    #site-navigation.main-small-navigation ul.sub-menu li.sub-menu-open > ul.sub-menu,
+    #site-navigation.main-small-navigation ul.children li.sub-menu-open > ul.children {
+        left: auto;
+        right: 100%;
+    }
+}
