@@ -29,8 +29,8 @@ Ověřeno ve zdrojovém souboru:
 - rozbalovací chip má `background: #F69581; border-color: #F69581; color: #FFFFFF`,
 - na mobilu platí `top: 0` a `transform: none` pro `.sub-toggle` a jeho
   vnořené varianty,
-- od 768 px je chip skrytý a na tabletu platí `display: block` pro
-  `#site-navigation.main-navigation .sub-menu`.
+- od 768 px je chip skrytý a na tabletu se podmenu zobrazuje přes
+  `li:hover`, `li.focus` a `li.sub-menu-open`.
 
 ## 1. Požadavky
 
@@ -210,21 +210,26 @@ otevřít. Obnovit hover dropdown a explicitně vrátit i pozici:
 
 ```css
 @media (min-width: 768px) and (max-width: 1024px) {
-	#site-navigation.main-navigation .sub-menu,
 	#site-navigation.main-navigation ul li:hover > ul.sub-menu,
+	#site-navigation.main-navigation ul li:hover > ul.children,
 	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu,
-	#site-navigation.main-navigation ul li.focus > ul.sub-menu {
+	#site-navigation.main-navigation ul li.focus > ul.sub-menu,
+	#site-navigation.main-navigation ul li.focus > ul.children,
+	#site-navigation.main-navigation li.sub-menu-open > ul.sub-menu,
+	#site-navigation.main-navigation li.sub-menu-open > ul.children {
 		display: block;
 		visibility: visible;
 	}
 
 	#site-navigation.main-navigation ul li:hover > ul,
-	#site-navigation.main-navigation ul li.focus > ul {
+	#site-navigation.main-navigation ul li.focus > ul,
+	#site-navigation.main-navigation li.sub-menu-open > ul {
 		left: auto;
 	}
 
 	#site-navigation.main-navigation ul ul li:hover > ul,
-	#site-navigation.main-navigation ul ul li.focus > ul {
+	#site-navigation.main-navigation ul ul li.focus > ul,
+	#site-navigation.main-navigation ul ul li.sub-menu-open > ul {
 		left: 100%;
 	}
 }
@@ -239,6 +244,26 @@ otevírání, na tabletu se použije běžný hover.
 
 Podmenu zůstává mimo obraz pomocí `left: -99999px` z tématu a zobrazí se při
 hoveru nebo focusu.
+
+### 4.9 `js/navigation.js` – tablet bez CSS hoveru
+
+Dotykový tablet hlásí `hover: none`, takže samotné CSS `:hover` podmenu
+neotevře. Proto je v [`js/navigation.js`](../js/navigation.js:265) doplněno
+tabletové chování pro šířku 768–1024 px:
+
+- `pointerover` s `buttons === 0` (pero nebo myš nad položkou) otevře podmenu
+  přes třídu `sub-menu-open`,
+- `pointerout` zavře podmenu u myši; u pera ho záměrně nechá otevřené, aby
+  dotyk hned nezavřel právě otevřenou větev,
+- `click` na nadřazený odkaz ověří dotykový vstup (`pointerType` `touch`/`pen`
+  nebo `hover: none`). Pokud podmenu není otevřené, zavolá `preventDefault()`
+  a podmenu otevře. Druhý tap na už otevřený odkaz naviguje,
+- aktivace klávesnicí (`detail === 0`) vždy následuje odkaz,
+- na mobilu je `tabletMq.matches` false, takže se toto chování nespouští a chipy
+  fungují jako dosud.
+
+CSS proto v tabletovém bloku obsahuje i `li.sub-menu-open > ul` s `left: auto`
+a vnořené varianty s `left: 100%`, aby se podmenu zobrazilo i bez `:hover`.
 
 ## 5. Co se nemění
 
@@ -261,12 +286,15 @@ hoveru nebo focusu.
 6. Mobil: automaticky rozbalená aktuální větev – chip je plný růžový a správně ukotvený.
 7. Mobil: dlouhý název položky se zalamuje – chip zůstává nahoře u řádku a text
    se s ním nepřekrývá.
-8. Tablet 768 px a 1024 px: chipy nejsou vidět a podmenu se otevírá hoverem myši.
-9. Desktop: chipy nejsou vidět, menu funguje beze změny.
-10. Mobilní šířka na zařízení s hoverem: hover je světle růžový, rozbalovací
+8. Tablet 768 px a 1024 px: chipy nejsou vidět a podmenu se otevírá najetím
+   pera nebo myši bez kliknutí.
+9. Tablet s dotykem: první tap na nadřazený odkaz otevře podmenu a nenaviguje;
+   druhý tap na tentýž odkaz už naviguje.
+10. Desktop: chipy nejsou vidět, menu funguje beze změny.
+11. Mobilní šířka na zařízení s hoverem: hover je světle růžový, rozbalovací
     hover tmavší růžový, žádný zelený stav.
-11. Klávesnice: focus je viditelný tmavě červenohnědý, Enter a Space fungují.
-12. RTL: chip je vlevo, svislé ukotvení funguje stejně.
+12. Klávesnice: focus je viditelný tmavě červenohnědý, Enter a Space fungují.
+13. RTL: chip je vlevo, svislé ukotvení funguje stejně.
 
 ## 7. Rollback
 
@@ -280,4 +308,5 @@ ani databáze se touto úpravou nemění.
 - Zkontrolovat, že na mobilu platí `top: 0` a `transform: none` pro `.sub-toggle`.
 - Zkontrolovat, že nad 767 px platí `#site-navigation .sub-toggle { display: none; }`.
 - `node --check js/navigation.js` – bez chyb.
-- V `js/navigation.js` už není breakpoint 1024 pro `mq` ani pro `reset`.
+- V `js/navigation.js` je tabletové chování jen v rozsahu 768–1024 px
+  (`tabletMq`) a na mobilu se nespouští.

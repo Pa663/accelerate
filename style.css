@@ -3190,24 +3190,26 @@ button#wp-custom-header-video-button {
 
 /* Tablets use the original hover dropdown again, without chips. */
 @media (min-width: 768px) and (max-width: 1024px) {
-	#site-navigation.main-navigation .sub-menu,
-	#site-navigation.main-navigation ul.children,
 	#site-navigation.main-navigation ul li:hover > ul.sub-menu,
 	#site-navigation.main-navigation ul li:hover > ul.children,
 	#site-navigation.main-navigation ul.menu-main-menu-container ul li:hover > ul.sub-menu,
 	#site-navigation.main-navigation ul li.focus > ul.sub-menu,
-	#site-navigation.main-navigation ul li.focus > ul.children {
+	#site-navigation.main-navigation ul li.focus > ul.children,
+	#site-navigation.main-navigation li.sub-menu-open > ul.sub-menu,
+	#site-navigation.main-navigation li.sub-menu-open > ul.children {
 		display: block;
 		visibility: visible;
 	}
 
 	#site-navigation.main-navigation ul li:hover > ul,
-	#site-navigation.main-navigation ul li.focus > ul {
+	#site-navigation.main-navigation ul li.focus > ul,
+	#site-navigation.main-navigation li.sub-menu-open > ul {
 		left: auto;
 	}
 
 	#site-navigation.main-navigation ul ul li:hover > ul,
-	#site-navigation.main-navigation ul ul li.focus > ul {
+	#site-navigation.main-navigation ul ul li.focus > ul,
+	#site-navigation.main-navigation ul ul li.sub-menu-open > ul {
 		left: 100%;
 	}
 }

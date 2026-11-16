@@ -83,6 +83,18 @@ jQuery( function( $ ) {
 		removeListener: function() {}
 	};
 
+	// Tablets have no usable CSS hover on touch input, so the dropdown is
+	// opened from pointer events instead of :hover alone.
+	var tabletMq = window.matchMedia ? window.matchMedia( '(min-width: 768px) and (max-width: 1024px)' ) : {
+		matches: 768 <= window.innerWidth && window.innerWidth <= 1024
+	};
+
+	var hoverMq = window.matchMedia ? window.matchMedia( '(hover: hover)' ) : {
+		matches: true
+	};
+
+	var lastPointerType = '';
+
 	function getNav() {
 		return $( '#site-navigation' );
 	}
@@ -133,6 +145,48 @@ jQuery( function( $ ) {
 		getNav().find( '.sub-toggle[aria-expanded="true"]' ).each( function() {
 			setState( $( this ), false, animate );
 		} );
+	}
+
+	/**
+	 * Returns the direct submenu of a menu item.
+	 */
+	function getSubmenu( $li ) {
+		return $li.children( 'ul.sub-menu, ul.children' ).first();
+	}
+
+	/**
+	 * Tablet replacement for CSS hover: opens the branch without navigating.
+	 */
+	function openTabletBranch( $li ) {
+		var $sub = getSubmenu( $li );
+
+		if ( ! $sub.length || $li.hasClass( 'sub-menu-open' ) ) {
+			return;
+		}
+
+		$li.siblings( '.sub-menu-open' ).each( function() {
+			closeTabletBranch( $( this ) );
+		} );
+
+		var $btn = $li.children( '.sub-toggle' ).first();
+
+		if ( $btn.length ) {
+			setState( $btn, true, false );
+		} else {
+			$li.addClass( 'sub-menu-open' );
+			$sub.stop( true, true ).show();
+		}
+	}
+
+	function closeTabletBranch( $li ) {
+		var $btn = $li.children( '.sub-toggle' ).first();
+
+		if ( $btn.length ) {
+			setState( $btn, false, false );
+		}
+
+		$li.removeClass( 'sub-menu-open' );
+		getSubmenu( $li ).stop( true, true ).hide();
 	}
 
 	/**
@@ -207,6 +261,74 @@ jQuery( function( $ ) {
 
 		autoExpandCurrentBranch();
 	}
+
+	// Remembers the pointer type because some browsers omit it on click.
+	$( document ).on( 'pointerdown', function( event ) {
+		var original = event.originalEvent || {};
+
+		lastPointerType = original.pointerType || '';
+	} );
+
+	// Tablet: pen or mouse hover opens the dropdown without a click.
+	// Contact (buttons) and touch are ignored here, they are handled by click.
+	$( document ).on( 'pointerover', '#site-navigation li.menu-item-has-children, #site-navigation li.page_item_has_children', function( event ) {
+		if ( ! tabletMq.matches ) {
+			return;
+		}
+
+		var original = event.originalEvent || {};
+
+		if ( 'touch' === original.pointerType || original.buttons ) {
+			return;
+		}
+
+		if ( original.relatedTarget && this.contains( original.relatedTarget ) ) {
+			return;
+		}
+
+		openTabletBranch( $( this ) );
+	} );
+
+	$( document ).on( 'pointerout', '#site-navigation li.menu-item-has-children, #site-navigation li.page_item_has_children', function( event ) {
+		if ( ! tabletMq.matches ) {
+			return;
+		}
+
+		var original = event.originalEvent || {};
+
+		// Touch and pen keep the branch open until another item or outside
+		// tap closes it, otherwise a tap would open and immediately close it.
+		if ( 'touch' === original.pointerType || 'pen' === original.pointerType ) {
+			return;
+		}
+
+		if ( original.relatedTarget && this.contains( original.relatedTarget ) ) {
+			return;
+		}
+
+		closeTabletBranch( $( this ) );
+	} );
+
+	// Tablet touch: the first tap opens the branch instead of navigating.
+	// A second tap on an already open parent link follows the link.
+	$( document ).on( 'click', '#site-navigation li.menu-item-has-children > a, #site-navigation li.page_item_has_children > a', function( event ) {
+		if ( ! tabletMq.matches ) {
+			return;
+		}
+
+		var original = event.originalEvent || {};
+		var pointerType = original.pointerType || lastPointerType;
+		var touchLike = 'touch' === pointerType || 'pen' === pointerType || ! hoverMq.matches;
+		var $li = $( this ).parent();
+
+		// Keyboard activation (detail 0) always follows the link.
+		if ( 0 === original.detail || ! touchLike || $li.hasClass( 'sub-menu-open' ) ) {
+			return;
+		}
+
+		event.preventDefault();
+		openTabletBranch( $li );
+	} );
 
 	// Toggle a submenu. The parent link is never intercepted.
 	$( document ).on( 'click', '#site-navigation .sub-toggle', function( event ) {
