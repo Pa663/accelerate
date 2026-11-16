@@ -4,6 +4,16 @@ Accelerate is multipurpose WordPress theme made for simplicity and ease of use. 
 
 /**********************************************************/
 
+== VERSIONING ==
+
+This repository is a customized fork of the Accelerate theme. The 9.x.x
+series tracks the upstream 1.x releases and keeps the project's responsive
+navigation improvements. Version 9.6.0 corresponds to upstream 1.6.0 plus
+the navigation changes documented in the changelog below. The upstream
+changelog is kept below the 9.x.x entries for reference.
+
+/**********************************************************/
+
 == COPYRIGHT AND LICENSE ==
 
 External resources linked to the theme.
@@ -51,6 +61,35 @@ If you want to translate this theme to your language, Please visit:- https://tra
 /**********************************************************/
 
 == Changelog ==
+= Version 9.6.0 - 2026-11-16 =
+* Merge  - Synced the theme with the upstream Accelerate 1.6.0 distribution.
+* Dev    - WordPress tested up to 7.1; minimum WordPress 5.8 and PHP 7.4.
+* Dev    - Assets use the theme version for cache busting.
+* Dev    - Removed the IE8 html5shiv dependency; an empty `html5shiv` handle is kept for backward compatibility.
+* Fix    - PHP 8 warning in the Tag widget.
+* Fix    - Widget styling inside Elementor.
+* Fix    - Submenu caret state when a mobile submenu is opened.
+* Fix    - Custom background hidden behind the page in the full-width layout.
+* Fix    - Primary color on the block Cart and Checkout buttons.
+* Fix    - Search block input and button heights on the front end and in the editor.
+* Fix    - Image Service widget empty markup when no pages are selected.
+* Fix    - Recent Work widget items collapsing when a page has no featured image.
+* Fix    - JavaScript error on pages without a primary menu.
+* Fix    - PHP warnings in the slider and Call to Action widget when an image or button link is missing.
+* Fix    - Block editor typography now follows the Customizer settings.
+* Tweak  - Preserved the custom responsive navigation from the 9.x series:
+           accessible submenu toggle buttons, single-tap parent links,
+           mobile accordion, automatic current-branch expansion, Escape and
+           outside-click closing, nested submenu flipping, breakpoint reset,
+           RTL parity, and the `#F69581` submenu chips.
+* Fix    - Restored the `accelerateMenuL10n` script localization that was
+           dropped during the manual 1.6.0 merge.
+* Tweak  - Hardened `js/navigation.js` against missing jQuery, missing or
+           partial localization data, empty menu items, and repeated
+           initialization; added a file-level contract and JSDoc comments.
+* Tweak  - Legacy `html5shiv` and unused Font Awesome CSS files are retained
+           for backward compatibility but are no longer enqueued.
+
 = Version 1.6.0 - 2026-10-06 =
 * Dev - WordPress tested up to 7.1.
 * Dev - Minimum WordPress version to 5.8 and PHP version to 7.4.

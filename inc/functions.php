@@ -69,6 +69,18 @@ function accelerate_scripts_styles_method() {
 	// Theme version, so a theme update busts cached copies (false would use the WordPress version).
 	wp_enqueue_script( 'accelerate-navigation', ACCELERATE_JS_URL . '/navigation.js', array( 'jquery' ), ACCELERATE_THEME_VERSION, true );
 
+	// Screen-reader labels for the submenu toggle buttons injected by navigation.js.
+	// The script falls back to English when this object is missing, but keeping the
+	// strings here makes them translatable and keeps the JS contract explicit.
+	wp_localize_script(
+		'accelerate-navigation',
+		'accelerateMenuL10n',
+		array(
+			'expand'   => __( 'Open submenu', 'accelerate' ),
+			'collapse' => __( 'Close submenu', 'accelerate' ),
+		)
+	);
+
 	// Skip link focus fix JS enqueue.
 	wp_enqueue_script( 'accelerate-skip-link-focus-fix', ACCELERATE_JS_URL . '/skip-link-focus-fix.js', array(), ACCELERATE_THEME_VERSION, true );
 

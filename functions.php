@@ -200,9 +200,17 @@ define( 'ACCELERATE_ADMIN_IMAGES_URL', ACCELERATE_ADMIN_URL . '/images' );
 define( 'ACCELERATE_ADMIN_JS_URL', ACCELERATE_ADMIN_URL . '/js' );
 define( 'ACCELERATE_ADMIN_CSS_URL', ACCELERATE_ADMIN_URL . '/css' );
 
-// Theme version.
-$accelerate_theme = wp_get_theme('accelerate');
-define( 'ACCELERATE_THEME_VERSION', $accelerate_theme->get( 'Version' ) );
+// Theme version. Resolve the parent theme by its template slug so an active
+// child theme or a renamed theme folder still yields a usable cache-busting
+// value. The fallback matches the version declared in style.css.
+$accelerate_theme         = wp_get_theme( get_template() );
+$accelerate_theme_version = $accelerate_theme->get( 'Version' );
+
+if ( empty( $accelerate_theme_version ) ) {
+	$accelerate_theme_version = '9.6.0';
+}
+
+define( 'ACCELERATE_THEME_VERSION', $accelerate_theme_version );
 
 /** Load functions */
 require_once ACCELERATE_INCLUDES_DIR . '/custom-header.php';

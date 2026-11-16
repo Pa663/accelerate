@@ -2,6 +2,12 @@
 
 Stav: **implementováno v pracovním stromu, čeká ruční testování na serveru.**
 Datum: 2026-11-16.
+Aktuální verze: **9.6.0**. Tato verze slučuje upstream Accelerate 1.6.0
+a zachovává kompletní vlastní responzivní navigaci. Během ručního sloučení
+vypadla registrace `accelerateMenuL10n`; byla obnovena v
+[`inc/functions.php`](../inc/functions.php:75). Nálezy a opravy shrnuje
+[13-verifikace-9.6.0.md](13-verifikace-9.6.0.md).
+
 Poslední doplnění: výraznější chipy šipek a odlišení plovoucího tlačítka
 `#scroll-up`, viz [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md).
 Barvy chipu `#F69581`, ukotvení k menu položce a omezení chipů na mobil
@@ -14,7 +20,7 @@ mění se `style.css` a `js/navigation.js`.
 
 ## 1. Soubory k nahrání
 
-Nahrajte těchto pět souborů z kořene šablony:
+Nahrajte tyto runtime soubory z kořene šablony:
 
 | # | Soubor | Stav |
 | --- | --- | --- |
@@ -27,13 +33,19 @@ Nahrajte těchto pět souborů z kořene šablony:
 Poznámka: `rtl.css` není v této šabloně nikde enqueued. Úprava je připravená pro případ,
 že jej načítá child theme nebo plugin. Pokud RTL nepoužíváte, stačí nahrát první čtyři soubory.
 
+Dokumentace k verzi 9.6.0: [`readme.txt`](../readme.txt),
+[`languages/accelerate.pot`](../languages/accelerate.pot) a
+[13-verifikace-9.6.0.md](13-verifikace-9.6.0.md). Tyto soubory nejsou
+potřeba pro běh webu, ale doporučuje se je nahrát kvůli dohledatelnosti.
+
 Poslední úprava z [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) mění
 `style.css`, `rtl.css` a `js/navigation.js`. Úpravy z
 [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) a
 [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md)
 mění `style.css` a `js/navigation.js` (chip jen do 767 px, nechipové chování
 nad 767 px, značky a rámování podmenu).
-`header.php` a `inc/functions.php` zůstávají z předchozího balíčku.
+`header.php` zůstává z předchozího balíčku. `inc/functions.php` byl v 9.6.0
+upraven kvůli obnovení lokalizace `accelerateMenuL10n` a robustnosti verze.
 
 ## 2. Co se změnilo
 
@@ -64,20 +76,31 @@ nad 767 px, značky a rámování podmenu).
 - Klik mimo navigaci zavře otevřená podmenu.
 - Ochrana proti dvojí inicializaci a reakce na `customize-preview-menu-refreshed`.
 - Opraveno lepení třídy `nav-menu` bez mezery.
+- Doplněna obrana proti chybějícímu jQuery, chybějícímu nebo neúplnému
+  `accelerateMenuL10n`, prázdným položkám a opakované inicializaci.
+- Doplněna souborová dokumentace (DOM kontrakt, stavový model, breakpointy,
+  chybové stavy, známá omezení) a JSDoc u pomocných funkcí.
+- `Escape` už nekrade fokus, pokud není otevřené podmenu.
+- ID podmenu se generují přes rostoucí čítač, aby při opakované inicializaci
+  nevznikly duplicitní identifikátory.
 
 ### 2.3 `inc/functions.php`
 
-- `style.css` a `navigation.js` mají verzi z `filemtime()` s fallbackem na verzi šablony.
-  Tím se po nahrání na server vynutí nová cache.
+- Assety používají `ACCELERATE_THEME_VERSION` (verze šablony) pro cache busting.
+  Při sloučení 1.6.0 bylo `filemtime()` nahrazeno verzí šablony; po aktualizaci
+  šablony se cache vynutí novou verzí.
+- `ACCELERATE_THEME_VERSION` se načítá přes `wp_get_theme( get_template() )`
+  s fallbackem `9.6.0`, takže funguje i v child theme nebo po přejmenování složky.
 - Přidán `wp_localize_script` s objektem `accelerateMenuL10n` pro překlad
-  `Open submenu` a `Close submenu`.
+  `Open submenu` a `Close submenu`. Registrace byla při ručním sloučení 1.6.0
+  ztracena a nyní je obnovena.
 
 ### 2.4 `style.css`
 
 Na konci souboru je nový blok `RESPONSIVE MENU FIX`:
 
-- `.sub-toggle` je v dotykovém režimu `button` s tap targetem 48×44 px.
-- Nadřazený odkaz má `padding-right: 56px`, aby se text nepřekrýval se šipkou.
+- `.sub-toggle` je v dotykovém režimu `button` s tap targetem 40×40 px.
+- Nadřazený odkaz má `padding-right: 64px`, aby se text nepřekrýval se šipkou.
 - Podmenu se v dotykovém režimu skrývá a zobrazuje podle třídy `sub-menu-open`.
 - Na mobilu je podmenu statické v toku dokumentu, nikoli absolutně pozicované.
 - Na tabletu zůstává dropdown, ale s `left: auto` pro otevřený stav.

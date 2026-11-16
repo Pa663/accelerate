@@ -1,7 +1,57 @@
 /**
  * navigation.js
  *
- * Handles the responsive navigation menu.
+ * Responsive navigation for the Accelerate theme.
+ *
+ * Responsibilities:
+ * - Adds the `nav-menu` class and a stable `primary-menu` id when WordPress
+ *   did not provide them.
+ * - Injects an accessible `button.sub-toggle` for every menu item that owns a
+ *   submenu and keeps `aria-expanded` / `aria-controls` in sync.
+ * - Mobile (max-width: 767px): accordion submenus, one open branch per level,
+ *   and automatic expansion of the current page branch.
+ * - Tablet/desktop (min-width: 768px): CSS hover where available, pointer
+ *   events on hover-less devices, and a left flip for nested submenus that
+ *   would overflow the viewport.
+ * - Escape closes open submenus and returns focus to the parent link; a click
+ *   outside the navigation closes them as well.
+ * - Resets transient state on breakpoint changes, orientation changes, and
+ *   Customizer selective refresh.
+ *
+ * DOM contract (provided by header.php and WordPress):
+ * - `#site-navigation` container.
+ * - `.menu-toggle` button inside the container.
+ * - `ul.nav-menu` (or the first `ul`) as the primary menu.
+ * - `li.menu-item-has-children` / `li.page_item_has_children` with a direct
+ *   `ul.sub-menu` or `ul.children`.
+ *
+ * State contract:
+ * - `aria-expanded="true|false"` on `.sub-toggle` and `.menu-toggle`.
+ * - `.active` on the open `.sub-toggle` (icon rotation).
+ * - `.sub-menu-open` on the open `li` (CSS visibility).
+ * - `.sub-menu-flip` on a nested `li` whose submenu opens to the left.
+ * - `body.accelerate-menu-open` while the mobile menu is expanded.
+ *
+ * Dependencies:
+ * - jQuery (the script is enqueued with `jquery` as a dependency).
+ * - Optional `window.accelerateMenuL10n` with `expand` and `collapse`
+ *   labels. English fallbacks are used when it is missing or incomplete.
+ *
+ * Error handling / graceful degradation:
+ * - Returns early when `#site-navigation` or its menu is missing, so pages
+ *   without a primary menu (for example Legacy Widget previews) do not throw.
+ * - Hides the toggle when there is no menu.
+ * - Guards every optional DOM lookup and every optional submenu before use.
+ * - Falls back to `window.innerWidth` when `matchMedia` is unavailable.
+ * - Does not use `touchstart` or `preventDefault()` on parent links, so a
+ *   single tap always navigates.
+ *
+ * Known limitations:
+ * - The hamburger stays closed after navigation by design; the current branch
+ *   is re-expanded when the menu is opened again.
+ * - Only the current branch is auto-expanded, not every previously opened one.
+ * - Mobile uses an accordion; tablet/desktop use a dropdown.
+ * - A child theme that overrides this file must re-apply these changes.
  *
  * @package Accelerate
  */
@@ -13,7 +63,7 @@
 		return;
 	}
 
-	var menu = container.getElementsByTagName( 'ul' )[ 0 ];
+	var menu = container.querySelector( 'ul.nav-menu' ) || container.getElementsByTagName( 'ul' )[ 0 ];
 	var button = container.getElementsByClassName( 'menu-toggle' )[ 0 ];
 
 	// Hide the menu toggle when there is no menu and return early.
@@ -24,8 +74,8 @@
 		return;
 	}
 
-	if ( -1 === menu.className.indexOf( 'nav-menu' ) ) {
-		menu.className += ' nav-menu';
+	if ( -1 === ( menu.className || '' ).indexOf( 'nav-menu' ) ) {
+		menu.className = ( menu.className || '' ) + ' nav-menu';
 	}
 
 	if ( ! menu.id ) {
@@ -42,20 +92,51 @@
 	var len;
 
 	/**
-	 * Sets or removes the .focus class on an element.
+	 * Checks whether an element has a class without assuming `className` is a
+	 * string. Inline SVG elements expose `SVGAnimatedString` instead.
+	 *
+	 * @param {Element} element   The element to inspect.
+	 * @param {string}  className The class name to look for.
+	 * @return {boolean} True when the class is present.
+	 */
+	function hasClass( element, className ) {
+		if ( element.classList ) {
+			return element.classList.contains( className );
+		}
+
+		return -1 !== ( element.className || '' ).indexOf( className );
+	}
+
+	/**
+	 * Toggles a class on an element with the same safety net as `hasClass`.
+	 *
+	 * @param {Element} element   The element to update.
+	 * @param {string}  className The class name to toggle.
+	 */
+	function toggleClass( element, className ) {
+		if ( element.classList ) {
+			element.classList.toggle( className );
+			return;
+		}
+
+		if ( hasClass( element, className ) ) {
+			element.className = ( element.className || '' ).replace( ' ' + className, '' );
+		} else {
+			element.className = ( element.className || '' ) + ' ' + className;
+		}
+	}
+
+	/**
+	 * Sets or removes the .focus class on the ancestors of a focused link.
 	 */
 	function toggleFocus() {
 		var self = this;
 
 		// Move up through the ancestors of the current link until we hit .nav-menu.
-		while ( self && -1 === self.className.indexOf( 'nav-menu' ) ) {
+		while ( self && ! hasClass( self, 'nav-menu' ) ) {
 			// On li elements toggle the class .focus.
 			if ( 'li' === self.tagName.toLowerCase() ) {
-				if ( -1 !== self.className.indexOf( 'focus' ) ) {
-					self.className = self.className.replace( ' focus', '' );
-				} else {
-					self.className += ' focus';
-				}
+				toggleClass( self, 'focus' );
 			}
 
 			self = self.parentElement;
@@ -64,19 +145,33 @@
 
 	// Each time a menu link is focused or blurred, toggle focus.
 	for ( i = 0, len = links.length; i < len; i++ ) {
+		if ( ! links[ i ].addEventListener ) {
+			continue;
+		}
+
 		links[ i ].addEventListener( 'focus', toggleFocus, true );
 		links[ i ].addEventListener( 'blur', toggleFocus, true );
 	}
 } )();
 
-jQuery( function( $ ) {
+// jQuery is a declared dependency. The guard prevents a ReferenceError if a
+// plugin dequeues it or a CDN fails; the rest of the page keeps working.
+'function' === typeof window.jQuery && jQuery( function( $ ) {
 	'use strict';
 
-	var l10n = window.accelerateMenuL10n || {
-		expand: 'Open submenu',
-		collapse: 'Close submenu'
-	};
+	var l10n = window.accelerateMenuL10n;
 
+	// A missing, partial, or malformed localization object must not leave the
+	// screen-reader label empty or throw in strict mode.
+	if ( ! l10n || 'object' !== typeof l10n ) {
+		l10n = {};
+	}
+
+	l10n.expand = l10n.expand || 'Open submenu';
+	l10n.collapse = l10n.collapse || 'Close submenu';
+
+	// `matchMedia` is available in every browser the theme supports. The
+	// fallbacks keep the script usable in older or embedded webviews.
 	var mq = window.matchMedia ? window.matchMedia( '(max-width: 767px)' ) : {
 		matches: window.innerWidth <= 767,
 		addListener: function() {},
@@ -94,7 +189,16 @@ jQuery( function( $ ) {
 	};
 
 	var lastPointerType = '';
+	var submenuUid = 0;
 
+	/**
+	 * Returns the navigation container.
+	 *
+	 * The selector is resolved on every call so the code keeps working after
+	 * the Customizer replaces the menu markup.
+	 *
+	 * @return {jQuery} The `#site-navigation` container, possibly empty.
+	 */
 	function getNav() {
 		return $( '#site-navigation' );
 	}
@@ -103,10 +207,14 @@ jQuery( function( $ ) {
 	 * Opens or closes a single submenu and keeps ARIA state in sync.
 	 */
 	function setState( $btn, open, animate ) {
+		if ( ! $btn || ! $btn.length ) {
+			return;
+		}
+
 		var $li = $btn.parent();
 		var $sub = $li.children( 'ul.sub-menu, ul.children' ).first();
 
-		if ( ! $sub.length ) {
+		if ( ! $li.length || ! $sub.length ) {
 			return;
 		}
 
@@ -141,6 +249,11 @@ jQuery( function( $ ) {
 		}
 	}
 
+	/**
+	 * Closes every open submenu.
+	 *
+	 * @param {boolean} animate Whether to animate the closing.
+	 */
 	function closeAll( animate ) {
 		getNav().find( '.sub-toggle[aria-expanded="true"]' ).each( function() {
 			setState( $( this ), false, animate );
@@ -158,6 +271,10 @@ jQuery( function( $ ) {
 	 * Tablet replacement for CSS hover: opens the branch without navigating.
 	 */
 	function openTabletBranch( $li ) {
+		if ( ! $li || ! $li.length ) {
+			return;
+		}
+
 		var $sub = getSubmenu( $li );
 
 		if ( ! $sub.length || $li.hasClass( 'sub-menu-open' ) ) {
@@ -178,7 +295,16 @@ jQuery( function( $ ) {
 		}
 	}
 
+	/**
+	 * Closes a branch opened by the pointer-event fallback.
+	 *
+	 * @param {jQuery} $li The menu item to close.
+	 */
 	function closeTabletBranch( $li ) {
+		if ( ! $li || ! $li.length ) {
+			return;
+		}
+
 		var $btn = $li.children( '.sub-toggle' ).first();
 
 		if ( $btn.length ) {
@@ -206,9 +332,13 @@ jQuery( function( $ ) {
 			return;
 		}
 
+		if ( ! $li.length || ! $li[ 0 ] ) {
+			return;
+		}
+
 		var rect = $li[ 0 ].getBoundingClientRect();
 		var width = $sub.outerWidth() || 200;
-		var viewport = document.documentElement.clientWidth;
+		var viewport = document.documentElement ? document.documentElement.clientWidth : window.innerWidth;
 
 		$li.toggleClass( 'sub-menu-flip', rect.right + width > viewport );
 	}
@@ -248,7 +378,7 @@ jQuery( function( $ ) {
 			return;
 		}
 
-		$nav.find( '.menu-item-has-children, .page_item_has_children' ).each( function( index ) {
+		$nav.find( '.menu-item-has-children, .page_item_has_children' ).each( function() {
 			var $li = $( this );
 			var $sub = $li.children( 'ul.sub-menu, ul.children' ).first();
 			var $link = $li.children( 'a' ).first();
@@ -258,7 +388,8 @@ jQuery( function( $ ) {
 			}
 
 			if ( ! $sub.attr( 'id' ) ) {
-				$sub.attr( 'id', 'accelerate-sub-menu-' + index );
+				submenuUid += 1;
+				$sub.attr( 'id', 'accelerate-sub-menu-' + submenuUid );
 			}
 
 			var $button = $( '<button>', {
@@ -425,15 +556,19 @@ jQuery( function( $ ) {
 	$( document ).on( 'keydown', function( event ) {
 		var key = event.key || event.keyCode;
 
-		if ( 'Escape' === key || 'Esc' === key || 27 === key ) {
-			var $open = getNav().find( '.sub-toggle[aria-expanded="true"]' ).last();
-
-			closeAll( true );
-
-			if ( $open.length ) {
-				$open.parent().children( 'a' ).first().trigger( 'focus' );
-			}
+		if ( 'Escape' !== key && 'Esc' !== key && 27 !== key ) {
+			return;
 		}
+
+		var $open = getNav().find( '.sub-toggle[aria-expanded="true"]' ).last();
+
+		// Do not steal focus when no submenu is open.
+		if ( ! $open.length ) {
+			return;
+		}
+
+		closeAll( true );
+		$open.parent().children( 'a' ).first().trigger( 'focus' );
 	} );
 
 	// A click outside the navigation closes open submenus.
@@ -443,6 +578,13 @@ jQuery( function( $ ) {
 		}
 	} );
 
+	/**
+	 * Clears transient state after a breakpoint or orientation change.
+	 *
+	 * The menu is not forced open or closed on mobile; only the desktop class
+	 * swap is normalised so a collapsed mobile menu cannot leak into the
+	 * desktop layout.
+	 */
 	function reset() {
 		closeAll( false );
 
@@ -452,7 +594,7 @@ jQuery( function( $ ) {
 		getNav().find( 'ul.sub-menu, ul.children' ).removeAttr( 'style' );
 
 		// Leaving the mobile width must not leave the menu in the collapsed state.
-		if ( window.innerWidth > 767 ) {
+		if ( ! mq.matches ) {
 			getNav().removeClass( 'main-small-navigation' ).addClass( 'main-navigation' );
 			getNav().find( '.menu-toggle' ).attr( 'aria-expanded', 'false' );
 			$( 'body' ).removeClass( 'accelerate-menu-open' );

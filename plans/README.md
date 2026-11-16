@@ -8,7 +8,11 @@ problémů na mobilu a tabletu.
 
 - Fáze: **implementováno, čeká ruční testování na serveru**
 - Datum: 2026-11-16
-- Rozsah: `header.php`, `js/navigation.js`, `style.css`, `rtl.css`, `inc/functions.php`
+- Verze: **9.6.0** – sloučení upstream Accelerate 1.6.0 při zachování
+  vlastní responzivní navigace; nálezy a opravy viz
+  [13-verifikace-9.6.0.md](13-verifikace-9.6.0.md)
+- Rozsah: `header.php`, `js/navigation.js`, `style.css`, `rtl.css`,
+  `functions.php`, `inc/functions.php`, `readme.txt`, `languages/accelerate.pot`
 - Poslední úprava: barvy, ukotvení a omezení chipu na mobil do 767 px podle
   [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md), nechipové chování
   nad 767 px, značky a rámování podle
@@ -42,6 +46,7 @@ problémů na mobilu a tabletu.
 | [10-sipka-od-768-a-flip-podmenu.md](10-sipka-od-768-a-flip-podmenu.md) | Šipka vnořených položek už od 768 px a překlopení podmenu u pravého okraje |
 | [11-fontawesome-woff2-glyf-bbox.md](11-fontawesome-woff2-glyf-bbox.md) | Vysvětlení varování `glyf: Glyph bbox was incorrect` u FontAwesome 4.7.0 a rozhodnutí jej neopravovat |
 | [12-non-passive-touchstart.md](12-non-passive-touchstart.md) | Vysvětlení `[Violation] Added non-passive event listener` u `touchstart` na slideru a rozhodnutí jej neopravovat |
+| [13-verifikace-9.6.0.md](13-verifikace-9.6.0.md) | Ověření sloučení upstream 1.6.0, nálezy, opravy a testovací checklist pro verzi 9.6.0 |
 
 ## Shrnutí problému
 
