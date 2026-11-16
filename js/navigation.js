@@ -83,10 +83,10 @@ jQuery( function( $ ) {
 		removeListener: function() {}
 	};
 
-	// Tablets have no usable CSS hover on touch input, so the dropdown is
-	// opened from pointer events instead of :hover alone.
-	var tabletMq = window.matchMedia ? window.matchMedia( '(min-width: 768px) and (max-width: 1024px)' ) : {
-		matches: 768 <= window.innerWidth && window.innerWidth <= 1024
+	// Non-chip widths have no usable CSS hover on touch input, so the dropdown
+	// is opened from pointer events instead of :hover alone.
+	var nonChipMq = window.matchMedia ? window.matchMedia( '(min-width: 768px)' ) : {
+		matches: 768 <= window.innerWidth
 	};
 
 	var hoverMq = window.matchMedia ? window.matchMedia( '(hover: hover)' ) : {
@@ -269,14 +269,18 @@ jQuery( function( $ ) {
 		lastPointerType = original.pointerType || '';
 	} );
 
-	// Tablet: pen or mouse hover opens the dropdown without a click.
+	// Non-chip widths: pen or mouse hover opens the dropdown without a click.
 	// Contact (buttons) and touch are ignored here, they are handled by click.
 	$( document ).on( 'pointerover', '#site-navigation li.menu-item-has-children, #site-navigation li.page_item_has_children', function( event ) {
-		if ( ! tabletMq.matches ) {
+		if ( ! nonChipMq.matches ) {
 			return;
 		}
 
 		var original = event.originalEvent || {};
+
+		if ( hoverMq.matches && 'pen' !== original.pointerType ) {
+			return;
+		}
 
 		if ( 'touch' === original.pointerType || original.buttons ) {
 			return;
@@ -290,11 +294,15 @@ jQuery( function( $ ) {
 	} );
 
 	$( document ).on( 'pointerout', '#site-navigation li.menu-item-has-children, #site-navigation li.page_item_has_children', function( event ) {
-		if ( ! tabletMq.matches ) {
+		if ( ! nonChipMq.matches ) {
 			return;
 		}
 
 		var original = event.originalEvent || {};
+
+		if ( hoverMq.matches && 'pen' !== original.pointerType ) {
+			return;
+		}
 
 		// Touch and pen keep the branch open until another item or outside
 		// tap closes it, otherwise a tap would open and immediately close it.
@@ -309,10 +317,10 @@ jQuery( function( $ ) {
 		closeTabletBranch( $( this ) );
 	} );
 
-	// Tablet touch: the first tap opens the branch instead of navigating.
+	// Non-chip touch: the first tap opens the branch instead of navigating.
 	// A second tap on an already open parent link follows the link.
 	$( document ).on( 'click', '#site-navigation li.menu-item-has-children > a, #site-navigation li.page_item_has_children > a', function( event ) {
-		if ( ! tabletMq.matches ) {
+		if ( ! nonChipMq.matches ) {
 			return;
 		}
 

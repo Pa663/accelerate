@@ -10,8 +10,10 @@ problémů na mobilu a tabletu.
 - Datum: 2026-11-16
 - Rozsah: `header.php`, `js/navigation.js`, `style.css`, `rtl.css`, `inc/functions.php`
 - Poslední úprava: barvy, ukotvení a omezení chipu na mobil do 767 px podle
-  [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md), mění se `style.css`
-  a `js/navigation.js`
+  [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) a nechipové chování
+  nad 767 px, značky a rámování podle
+  [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md),
+  mění se `style.css` a `js/navigation.js`
 - Mimo rozsah: přepis šablony, změna HTML struktury celého webu, výměna jQuery, redesign hlavičky
 - Balíček pro server a seznam změn: [06-implementovane-zmeny.md](06-implementovane-zmeny.md)
 
@@ -27,6 +29,7 @@ problémů na mobilu a tabletu.
 | [06-implementovane-zmeny.md](06-implementovane-zmeny.md) | Seznam změněných souborů k nahrání, popis implementace, ověření a rollback |
 | [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) | Návrh výraznějšího chipu pro šipky podmenu, tap target 44 px, RTL a testování |
 | [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) | Barva chipu `#F69581`, bílé/plné pozadí podle stavu a ukotvení chipu k položce na mobilu |
+| [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md) | Nechipové chování nad 767 px, značky vnořených podpoložek `#F69581` a jemné rámování podmenu |
 
 ## Shrnutí problému
 

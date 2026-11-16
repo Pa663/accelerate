@@ -5,7 +5,9 @@ Datum: 2026-11-16.
 Poslední doplnění: výraznější chipy šipek a odlišení plovoucího tlačítka
 `#scroll-up`, viz [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md).
 Barvy chipu `#F69581`, ukotvení k menu položce a omezení chipů na mobil
-do 767 px řeší [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md);
+do 767 px řeší [08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md).
+Nechipové chování nad 767 px, značky vnořených podpoložek a jemné rámování
+řeší [09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md);
 mění se `style.css` a `js/navigation.js`.
 
 ## 1. Soubory k nahrání
@@ -24,9 +26,11 @@ Poznámka: `rtl.css` není v této šabloně nikde enqueued. Úprava je připrav
 že jej načítá child theme nebo plugin. Pokud RTL nepoužíváte, stačí nahrát první čtyři soubory.
 
 Poslední úprava z [07-vyraznejsi-sipky.md](07-vyraznejsi-sipky.md) mění
-`style.css`, `rtl.css` a `js/navigation.js`. Úprava z
-[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) mění `style.css` a
-`js/navigation.js` (chip jen do 767 px, na tabletu hover dropdown).
+`style.css`, `rtl.css` a `js/navigation.js`. Úpravy z
+[08-chip-f69581-a-poloha.md](08-chip-f69581-a-poloha.md) a
+[09-nechipove-chovani-znacky-a-ramovani.md](09-nechipove-chovani-znacky-a-ramovani.md)
+mění `style.css` a `js/navigation.js` (chip jen do 767 px, nechipové chování
+nad 767 px, značky a rámování podmenu).
 `header.php` a `inc/functions.php` zůstávají z předchozího balíčku.
 
 ## 2. Co se změnilo
